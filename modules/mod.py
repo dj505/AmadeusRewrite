@@ -1,6 +1,7 @@
 import discord
 from discord.ext import commands
 import json
+import time
 
 with open('channels.json') as f:
     settings = json.load(f)
@@ -50,6 +51,22 @@ class Mod:
             embed = discord.Embed(title="Member banned by {}".format(ctx.message.author.name), description="Name: {0.name}\nID: {0.id}".format(member), color=0xFF9710)
             await self.bot.send_message(discord.Object(id=log_channel), embed=embed)
             await self.bot.say(':hammer: Banned user successfully! This action has been logged.')
+
+    @commands.has_permissions(manage_messages=True)
+    @commands.command(pass_context=True, brief="Clean specified number of messages")
+    async def purge(self, ctx, amount=0):
+        await self.bot.delete_message(ctx.message)
+        channel = ctx.message.channel
+        messages = []
+        if int(amount) > 1:
+            async for message in self.bot.logs_from(ctx.message.channel, limit=int(amount)):
+                messages.append(message)
+            await self.bot.delete_messages(messages)
+            message = await self.bot.say(':white_check_mark: Complete! Deleted {} messages.'.format(amount))
+            time.sleep(5)
+            await self.bot.delete_message(message)
+        else:
+            await self.bot.say('Please provide a number between 2 and 100!')
 
 def setup(bot):
     bot.add_cog(Mod(bot))
