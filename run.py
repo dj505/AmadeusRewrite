@@ -55,7 +55,9 @@ async def on_error(event_method, *args, **kwargs):
         await bot.log_channel.send("An error occurred while processing `{}`.".format(event_method), embed=embed)
 
 modules = [
-    'modules.load'
+    'modules.load',
+    'modules.logging',
+    'modules.testing'
 ]
 
 failed_modules = []
