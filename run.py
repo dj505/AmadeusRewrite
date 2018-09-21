@@ -53,18 +53,6 @@ async def on_command_error(error, ctx):
         print(''.join(tb))
         await bot.send_message(ctx.message.channel, embed=embed)
 
-#@bot.event
-#async def on_error(event_method, *args, **kwargs):
-#    if isinstance(args[0], commands.errors.CommandNotFound):
-#        return
-#    print("Ignoring exception in {}".format(event_method))
-#    tb = traceback.format_exc()
-#    error_trace = "".join(tb)
-#    print(error_trace)
-#    if bot.log_channel:
-#        embed = discord.Embed(description=error_trace)
-#        await bot.log_channel.send("An error occurred while processing `{}`.".format(event_method), embed=embed)
-
 modules = [
     'modules.load',
     'modules.logging',
@@ -80,7 +68,7 @@ for extension in modules:
         bot.load_extension(extension)
     except Exception as e:
         print('{} failed to load.\n{}: {}'.format(extension, type(e).__name__, e))
-        failed_addons.append([extension, type(e).__name__, e])
+        failed_modules.append([extension, type(e).__name__, e])
 if not failed_modules:
     print('All modules loaded!')
 
