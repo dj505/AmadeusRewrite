@@ -6,4 +6,5 @@ Python 3.5 or newer
 Latest version of discord.py
 
 ## Credits:
-[Kurisu](https://github.com/nh-server/Kurisu) for certain addons and commands, as well as error handing
+[Kurisu](https://github.com/nh-server/Kurisu) for the Load module and a few other snippets
+[GriffinG1/Midnight](https://github.com/GriffinG1/Midnight/) exclusively for references 
