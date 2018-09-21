@@ -14,7 +14,7 @@ prefix = settings['prefix']
 description = settings['description']
 
 client = discord.Client()
-bot = commands.Bot(command_prefix=prefix, description=description)
+bot = commands.Bot(pm_help=True, command_prefix=prefix, description=description)
 
 @client.event
 async def on_ready():
