@@ -103,7 +103,8 @@ venv.bak/
 # mypy
 .mypy_cache/
 
-# Other Things
-settings.json
-channels.json
-roles.json
+# Configs
+*.json
+
+# Server-specific Modules
+wcrg.py
