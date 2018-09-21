@@ -57,7 +57,8 @@ async def on_error(event_method, *args, **kwargs):
 modules = [
     'modules.load',
     'modules.logging',
-    'modules.testing'
+    'modules.testing',
+    'modules.xkcd'
 ]
 
 failed_modules = []
