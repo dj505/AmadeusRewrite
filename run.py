@@ -16,43 +16,54 @@ description = settings['description']
 client = discord.Client()
 bot = commands.Bot(pm_help=True, command_prefix=prefix, description=description)
 
-@client.event
+@bot.event
 async def on_ready():
-    print('{0.user} is up and running!'.format(client))
+    print('{0.user} is up and running!'.format(bot))
 
 @bot.event
-async def on_command_error(ctx, error):
-    if isinstance(error, discord.ext.commands.errors.CommandNotFound):
-        pass  # ...don't need to know if commands don't exist
-    elif isinstance(error, discord.ext.commands.NoPrivateMessage):
-        await ctx.send("You cannot use this command in DMs!")
-    elif isinstance(error, discord.ext.commands.errors.MissingRequiredArgument):
+async def on_command_error(error, ctx):
+    if isinstance(error, commands.errors.CommandNotFound):
+        embed = discord.Embed(title='Error!', description='I cannot find that command!', color=0xFF0000)
+        embed.set_thumbnail(url='https://i.imgur.com/z2xfrsH.png')
+        await bot.send_message(ctx.message.channel, embed=embed)
+    elif isinstance(error, commands.errors.CheckFailure):
+        embed = discord.Embed(title='Permissions error!', description='You do not have permission to use this command.', color=0xFF0000)
+        embed.set_thumbnail(url='https://i.imgur.com/z2xfrsH.png')
+        await bot.send_message(ctx.message.channel, embed=embed)
+    elif isinstance(error, commands.errors.MissingRequiredArgument):
         formatter = commands.formatter.HelpFormatter()
-        await ctx.send("You are missing required arguments.\n{}".format(formatter.format_help_for(ctx, ctx.command)[0]))
-    elif isinstance(error, discord.ext.commands.errors.CheckFailure):
-        await ctx.send("You don't have permission to use this command.")
+        # await bot.send_message(ctx.message.channel, "{} You are missing required arguments.\n{}".format(ctx.message.author.mention, formatter.format_help_for(ctx, ctx.command)[0]))
+        embed = discord.Embed(title='Error!', description='You are missing required arguments.', color=0xFF0000)
+        embed.add_field(name='Usage', value='{}'.format(ctx.message.author.mention, formatter.format_help_for(ctx, ctx.command)[0]))
+        embed.set_thumbnail(url='https://i.imgur.com/z2xfrsH.png')
+        await bot.send_message(ctx.message.channel, embed=embed)
+    elif isinstance(error, commands.errors.CommandOnCooldown):
+        try:
+            await bot.delete_message(ctx.message)
+        except discord.errors.NotFound:
+            pass
+        message = await bot.send_message(ctx.message.channel, "{} This command was used {:.2f}s ago! Please ry again in {:.2f}s.".format(ctx.message.author.mention, error.cooldown.per - error.retry_after, error.retry_after))
+        await asyncio.sleep(10)
+        await bot.delete_message(message)
     else:
-        if ctx.command:
-            await ctx.send("An error occurred while processing the `{}` command.".format(ctx.command.name))
+        embed = discord.Embed(title='Error!', description='An error occured processing that command.', color=0xFF0000)
+        embed.set_thumbnail(url='https://i.imgur.com/z2xfrsH.png')
         print('Ignoring exception in command {0.command} in {0.message.channel}'.format(ctx))
         tb = traceback.format_exception(type(error), error, error.__traceback__)
-        error_trace = "".join(tb)
-        print(error_trace)
-        if bot.log_channel:
-            embed = discord.Embed(description=error_trace)
-            await bot.log_channel.send("An error occurred while processing the `{}` command in channel `{}`.".format(ctx.command.name, ctx.message.channel), embed=embed)
+        print(''.join(tb))
+        await bot.send_message(ctx.message.channel, embed=embed)
 
-@bot.event
-async def on_error(event_method, *args, **kwargs):
-    if isinstance(args[0], commands.errors.CommandNotFound):
-        return
-    print("Ignoring exception in {}".format(event_method))
-    tb = traceback.format_exc()
-    error_trace = "".join(tb)
-    print(error_trace)
-    if bot.log_channel:
-        embed = discord.Embed(description=error_trace)
-        await bot.log_channel.send("An error occurred while processing `{}`.".format(event_method), embed=embed)
+#@bot.event
+#async def on_error(event_method, *args, **kwargs):
+#    if isinstance(args[0], commands.errors.CommandNotFound):
+#        return
+#    print("Ignoring exception in {}".format(event_method))
+#    tb = traceback.format_exc()
+#    error_trace = "".join(tb)
+#    print(error_trace)
+#    if bot.log_channel:
+#        embed = discord.Embed(description=error_trace)
+#        await bot.log_channel.send("An error occurred while processing `{}`.".format(event_method), embed=embed)
 
 modules = [
     'modules.load',
