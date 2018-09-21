@@ -3,7 +3,7 @@ import discord
 from discord.ext import commands
 import json
 
-with open('settings.json') as f:
+with open('channels.json') as f:
     settings = json.load(f)
 log_channel = settings['log_channel_id']
 
@@ -33,7 +33,7 @@ class Logging:
         await bot.send_message(discord.Object(id=log_channel), embed=embed)
 
     async def on_member_leave(member):
-        embed = discord.Embed(title="Member left", description="{0.mention}\nName: {0.name}#{0.discriminator}\nID:{0.id}".format(member), color=0xFF9710)
+        embed = discord.Embed(title="Member left or was kicked", description="{0.mention}\nName: {0.name}#{0.discriminator}\nID:{0.id}".format(member), color=0xFF9710)
         embed.set_thumbnail(url=member.avatar_url)
         await bot.send_message(discord.Object(id=log_channel), embed=embed)
 
