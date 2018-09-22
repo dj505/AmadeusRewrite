@@ -44,5 +44,19 @@ class Fun:
         embed.add_field(name="Highest Role", value=ctx.message.author.top_role)
         await self.bot.say(embed=embed)
 
+    @commands.has_permissions(ban_members=True)
+    @commands.command(pass_context=True, hidden=True, aliases=['givecredit','gc'])
+    async def givecredits(self, ctx, member: discord.Member, amount=0):
+        member = member.id
+        with open('wallets.json') as f:
+            wallets = json.load(f)
+        if member not in wallets:
+            wallets[member] = 0
+        balance = int(wallets[member]) + amount
+        wallets[member] = balance
+        with open('wallets.json', 'w') as f:
+            json.dump(wallets, f)
+        await self.bot.say(':moneybag: Wallet updated successfully! Your balance is now {} after being given {} credits.'.format(balance, amount))
+
 def setup(bot):
     bot.add_cog(Fun(bot))
