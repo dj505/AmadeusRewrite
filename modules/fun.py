@@ -12,7 +12,7 @@ class Fun:
         print('Module "{}" loaded'.format(self.__class__.__name__))
 
     @commands.command(pass_context=True, brief="Gain daily 150 credits")
-    @commands.cooldown(1, 86400.0, commands.BucketType.user)
+    @commands.cooldown(1, 86400, commands.BucketType.user)
     async def daily(self, ctx):
         """
         This command adds 150 credits to your wallet. Can only be used once per day.
