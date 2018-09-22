@@ -25,7 +25,7 @@ class Fun:
         balance = int(wallets[user]) + 150
         wallets[user] = balance
         with open('wallets.json', 'w') as f:
-            json.dump(wallets, f)
+            json.dump(wallets, f, indent=2, sort_keys=True)
         await self.bot.say(':moneybag: Wallet updated successfully! Your balance is now {}'.format(balance))
 
     @commands.command(pass_context=True, brief="Get user information")
@@ -55,7 +55,7 @@ class Fun:
         balance = int(wallets[member]) + amount
         wallets[member] = balance
         with open('wallets.json', 'w') as f:
-            json.dump(wallets, f)
+            json.dump(wallets, f, indent=2, sort_keys=True)
         await self.bot.say(':moneybag: Wallet updated successfully! Your balance is now {} after being given {} credits.'.format(balance, amount))
 
 def setup(bot):
