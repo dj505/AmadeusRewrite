@@ -1,6 +1,7 @@
 import discord
 from discord.ext import commands
 import json
+from datetime import datetime
 
 class Fun:
     """
@@ -27,6 +28,21 @@ class Fun:
             json.dump(wallets, f)
         await self.bot.say(':moneybag: Wallet updated successfully! Your balance is now {}'.format(balance))
 
+    @commands.command(pass_context=True, brief="Get user information")
+    async def userinfo(self, ctx, member=None):
+        """
+        Get information about a certain user, or yourself, if no user is specified
+        """
+        if member == None:
+            member = ctx.message.author
+        embed = discord.Embed(title="User information: {}".format(member.name), description=None, color=0x42F448)
+        embed.set_thumbnail(url=ctx.message.author.avatar_url)
+        embed.add_field(name="ID", value=str(ctx.message.author.id))
+        embed.add_field(name="Joined Server", value=str(ctx.message.author.joined_at))
+        embed.add_field(name="Joined Discord", value=str(ctx.message.author.created_at))
+        embed.add_field(name="Status", value=str(ctx.message.author.status).capitalize())
+        embed.add_field(name="Highest Role", value=ctx.message.author.top_role)
+        await self.bot.say(embed=embed)
 
 def setup(bot):
     bot.add_cog(Fun(bot))
