@@ -35,7 +35,7 @@ class xkcd:
         "real programmers": 378
     }
 
-    @commands.command()
+    @commands.command(brief="Grab an xkcd comic")
     async def xkcd(self, *, comic):
         comic = comic.lower()
         """Show xkcd comic by number. Use "latest" to show the latest comic, or "random" to show a random comic."""
