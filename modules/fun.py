@@ -2,6 +2,7 @@ import discord
 from discord.ext import commands
 import json
 from datetime import datetime
+import random
 
 class Fun:
     """
@@ -89,6 +90,10 @@ class Fun:
         with open('wallets.json', 'w') as f:
             json.dump(wallets, f, indent=2, sort_keys=True)
         await self.bot.say(':moneybag: Wallet updated successfully! Your balance is now {} after being given {} credits.'.format(balance, amount))
+
+    @commands.command(aliases=["cf","coin","flip"])
+    async def coinflip(self):
+        await self.bot.say(random.choice(["Heads!","Tails!"]))
 
 def setup(bot):
     bot.add_cog(Fun(bot))
