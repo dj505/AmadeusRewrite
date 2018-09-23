@@ -76,7 +76,6 @@ class Fun:
         embed.set_thumbnail(url=server.icon_url)
         await self.bot.say(embed=embed)
 
-
     @commands.has_permissions(ban_members=True)
     @commands.command(pass_context=True, hidden=True, aliases=['givecredit','gc'])
     async def givecredits(self, ctx, member: discord.Member, amount=0):
