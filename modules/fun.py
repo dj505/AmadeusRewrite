@@ -48,6 +48,35 @@ class Fun:
         embed.add_field(name="Wallet Balance", value=balance)
         await self.bot.say(embed=embed)
 
+    @commands.command(pass_context=True, brief="Server information")
+    async def serverinfo(self, ctx):
+        server = ctx.message.server
+        humans = len([member for member in server.members if not member.bot])
+        bots = len(([member for member in server.members if member.bot]))
+        embed = discord.Embed(title="Server Information", color=0x42F450)
+        text_channels = 0
+        voice_channels = 0
+        for channel in server.channels:
+            if channel.type == discord.ChannelType.text:
+                text_channels += 1
+            elif channel.type == discord.ChannelType.voice:
+                voice_channels += 1
+        embed.add_field(name="Name", value=server.name)
+        embed.add_field(name="Owner", value=server.owner)
+        embed.add_field(name="Member Count", value=str(humans))
+        embed.add_field(name="Bot Count", value=str(bots))
+        embed.add_field(name="Verification Level", value=str(server.verification_level).capitalize())
+        embed.add_field(name="Region", value=server.region)
+        embed.add_field(name="Highest Role", value=server.role_hierarchy[0])
+        embed.add_field(name="Role Count", value=len(server.roles))
+        embed.add_field(name="Emote Count", value=len(server.emojis))
+        embed.add_field(name="Text Channels", value=str(text_channels))
+        embed.add_field(name="Voice Channels", value=str(voice_channels))
+        embed.add_field(name="Created At", value=server.created_at.__format__('%A, %B %d, %Y at %H:%M:%S'), inline=False)
+        embed.set_thumbnail(url=server.icon_url)
+        await self.bot.say(embed=embed)
+
+
     @commands.has_permissions(ban_members=True)
     @commands.command(pass_context=True, hidden=True, aliases=['givecredit','gc'])
     async def givecredits(self, ctx, member: discord.Member, amount=0):
