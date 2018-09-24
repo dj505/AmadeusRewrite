@@ -35,11 +35,14 @@ class Voice:
 
     @commands.command(pass_context=True)
     async def play(self, ctx, url):
-        server = ctx.message.server
-        voice_client = self.bot.voice_client_in(server)
-        player = await voice_client.create_ytdl_player(url, after=lambda: check_queue(server.id))
-        players[server.id] = player
-        player.start()
+        if ctx.message.author.voice.voice_channel:
+            server = ctx.message.server
+            voice_client = self.bot.voice_client_in(server)
+            player = await voice_client.create_ytdl_player(url, after=lambda: check_queue(server.id))
+            players[server.id] = player
+            player.start()
+        else:
+            await self.bot.say(":x: You are not in a voice channel!")
 
     @commands.command(pass_context=True)
     async def pause(self, ctx):
