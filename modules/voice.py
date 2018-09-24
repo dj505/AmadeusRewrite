@@ -10,6 +10,7 @@ def check_queue(id):
         player = queues[id].pop(0)
         players[id] = player
         player.start()
+        del players[id]
 
 class Voice:
     """
@@ -35,12 +36,24 @@ class Voice:
 
     @commands.command(pass_context=True)
     async def play(self, ctx, url):
+        server = ctx.message.server
+        try:
+            await self.bot.join_voice_channel(ctx.message.author.voice.voice_channel)
+        except discord.errors.ClientException:
+            pass
+        voice_client = self.bot.voice_client_in(server)
         if ctx.message.author.voice.voice_channel:
-            server = ctx.message.server
-            voice_client = self.bot.voice_client_in(server)
-            player = await voice_client.create_ytdl_player(url, after=lambda: check_queue(server.id))
-            players[server.id] = player
-            player.start()
+            if server.id not in players:
+                player = await voice_client.create_ytdl_player(url, after=lambda: check_queue(server.id))
+                players[server.id] = player
+                player.start()
+            else:
+                player = await voice_client.create_ytdl_player(url, after=lambda: check_queue(server.id))
+                if server.id in queues:
+                    queues[server.id].append(player)
+                else:
+                    queues[server.id] = [player]
+                await self.bot.say(":white_check_mark: Video queued!")
         else:
             await self.bot.say(":x: You are not in a voice channel!")
 
@@ -59,17 +72,6 @@ class Voice:
             players[id].resume()
         else:
             await self.bot.say(":x: You are not in a voice channel!")
-
-    @commands.command(pass_context=True)
-    async def queue(self, ctx, url):
-        server = ctx.message.server
-        voice_client = self.bot.voice_client_in(server)
-        player = await voice_client.create_ytdl_player(url, after=lambda: check_queue(server.id))
-        if server.id in queues:
-            queues[server.id].append(player)
-        else:
-            queues[server.id] = [player]
-        await self.bot.say(":white_check_mark: Video queued!")
 
 def setup(bot):
     bot.add_cog(Voice(bot))
