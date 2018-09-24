@@ -13,7 +13,7 @@ def check_queue(id):
 
 class Voice:
     """
-    Experimental Voice Command
+    Experimental Music Commands
     """
     def __init__(self, bot):
         self.bot = bot
@@ -26,9 +26,12 @@ class Voice:
 
     @commands.command(pass_context=True, aliases=["dc","disconnect","exit"])
     async def leave(self, ctx):
-        server = ctx.message.server
-        voice_client = self.bot.voice_client_in(server)
-        await voice_client.disconnect()
+        if ctx.message.author.voice.voice_channel:
+            server = ctx.message.server
+            voice_client = self.bot.voice_client_in(server)
+            await voice_client.disconnect()
+        else:
+            await self.bot.say(":x: You are not in a voice channel!")
 
     @commands.command(pass_context=True)
     async def play(self, ctx, url):
@@ -40,13 +43,19 @@ class Voice:
 
     @commands.command(pass_context=True)
     async def pause(self, ctx):
-        id = ctx.message.server.id
-        players[id].pause()
+        if ctx.message.author.voice.voice_channel:
+            id = ctx.message.server.id
+            players[id].pause()
+        else:
+            await self.bot.say(":x: You are not in a voice channel!")
 
     @commands.command(pass_context=True)
     async def resume(self, ctx):
-        id = ctx.message.server.id
-        players[id].resume()
+        if ctx.message.author.voice.voice_channel:
+            id = ctx.message.server.id
+            players[id].resume()
+        else:
+            await self.bot.say(":x: You are not in a voice channel!")
 
     @commands.command(pass_context=True)
     async def queue(self, ctx, url):
