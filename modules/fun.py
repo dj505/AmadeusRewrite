@@ -4,6 +4,9 @@ import json
 from datetime import datetime
 import random
 
+def parser(message):
+    return(message[message.find(' ')+1:])
+
 class Fun:
     """
     Fun stuff
@@ -94,6 +97,12 @@ class Fun:
     @commands.command(aliases=["cf","coin","flip"])
     async def coinflip(self):
         await self.bot.say(random.choice(["Heads!","Tails!"]))
+
+    @commands.command(pass_context=True, brief='Says something')
+    async def say(self, ctx, *, string):
+        await self.bot.delete_message(ctx.message)
+        string = string.replace('@everyone', '`@everyone`').replace('@here', '`@here`')
+        await self.bot.say(string)
 
 def setup(bot):
     bot.add_cog(Fun(bot))

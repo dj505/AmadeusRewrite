@@ -3,6 +3,12 @@ import discord
 from discord.ext import commands
 from sys import argv
 
+def check_owner:
+    with open('settings.json','w') as f:
+        settings = json.load(f)
+    ownerid = settings["owner"]
+    return ctx.message.author.id == ownerid
+
 class Load:
     """
     Load commands.
@@ -11,8 +17,8 @@ class Load:
         self.bot = bot
         print('Module "{}" loaded'.format(self.__class__.__name__))
 
-    @commands.has_permissions(ban_members=True)
     @commands.command(hidden=True)
+    @commands.check(check_owner)
     async def load(self, *, module : str):
         """Loads an addon."""
         try:
@@ -28,8 +34,8 @@ class Load:
             embed.set_thumbnail(url='https://i.imgur.com/z2xfrsH.png')
             await self.bot.say(embed=embed)
 
-    @commands.has_permissions(ban_members=True)
     @commands.command(hidden=True)
+    @commands.check(check_owner)
     async def unload(self, *, module : str):
         """Unloads an addon."""
         try:
@@ -50,8 +56,8 @@ class Load:
             embed.set_thumbnail(url='https://i.imgur.com/z2xfrsH.png')
             await self.bot.say(embed=embed)
 
-    @commands.has_permissions(ban_members=True)
     @commands.command(name='reload', hidden=True)
+    @commands.check(check_owner)
     async def _reload(self, *, module : str):
         """Reloads an addon."""
         try:
