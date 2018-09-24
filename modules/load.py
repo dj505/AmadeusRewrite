@@ -2,6 +2,7 @@
 import discord
 from discord.ext import commands
 from sys import argv
+import json
 
 def check_owner(ctx):
     with open('settings.json','w') as f:
