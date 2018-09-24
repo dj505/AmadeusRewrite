@@ -5,9 +5,9 @@ from sys import argv
 import json
 
 def check_owner(ctx):
-    with open('settings.json','w') as f:
+    with open('settings.json', 'r') as f:
         settings = json.load(f)
-    ownerid = settings["owner"]
+    ownerid = settings["bot_owner"]
     return ctx.message.author.id == ownerid
 
 class Load:
