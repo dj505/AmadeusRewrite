@@ -3,7 +3,7 @@ import discord
 from discord.ext import commands
 from sys import argv
 
-def check_owner:
+def check_owner():
     with open('settings.json','w') as f:
         settings = json.load(f)
     ownerid = settings["owner"]
