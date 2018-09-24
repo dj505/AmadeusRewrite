@@ -59,7 +59,8 @@ modules = [
     'modules.testing',
     'modules.xkcd',
     'modules.mod',
-    'modules.fun'
+    'modules.fun',
+    'modules.voice'
 ]
 
 failed_modules = []
