@@ -106,5 +106,5 @@ venv.bak/
 # Configs
 *.json
 
-# Server-specific Modules
+# Server-specific or other Modules
 wcrg.py

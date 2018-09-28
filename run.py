@@ -3,6 +3,7 @@ from discord.ext import commands
 import json
 import sys, traceback
 import os
+import asyncio
 
 dir_path = os.path.dirname(os.path.realpath(__file__))
 os.chdir(dir_path)
