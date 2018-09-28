@@ -8,4 +8,4 @@ A complete rewrite of Amadeus (excluding some addons/modules)
 
 ## Credits:
 * [Kurisu](https://github.com/nh-server/Kurisu) for the Load module and a few other snippets
-* [GriffinG1/Midnight](https://github.com/GriffinG1/Midnight/) exclusively for references
+* [GriffinG1/Midnight](https://github.com/GriffinG1/Midnight/) for references and a warn module
