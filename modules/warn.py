@@ -9,10 +9,10 @@ import asyncio
 # I'll learn one day ;)
 # For now, I need something functional.
 
-with open('settings.json','r') as f:
-    settings = json.load(f)
-admin_role = settings['admin']
-mod_role = settings['mod']
+with open('roles.json','r') as f:
+    roles = json.load(f)
+admin_role = roles['admin']
+mod_role = roles['mod']
 
 with open('channels.json','r') as f:
     channels = json.load(f)
@@ -119,8 +119,8 @@ class Warns:
         if not found_member:
             await ctx.send(":x: I couldn't find that member!")
         else:
-            if not self.bot.staff_role in found_member.roles and not ctx.author == ctx.guild.owner and not ctx.message.author == found_member:
-                await ctx.send(":x: Insufficient permissions!")
+            if not admin_role in found_member.roles or mod_role in found_member.roles and not ctx.author == ctx.guild.owner and not ctx.message.author == found_member:
+                await ctx.send(":x: I'm sorry {}, I can't let you do that.".format(ctx.message.author.name))
             else:
                 try:
                     user_warns = self.warns[str(found_member.id)]
