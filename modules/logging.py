@@ -38,7 +38,7 @@ class Logging:
         embed.set_thumbnail(url=member.avatar_url)
         await self.bot.send_message(discord.Object(id=log_channel), embed=embed)
 
-    async def on_member_leave(self, member):
+    async def on_member_remove(self, member):
         embed = discord.Embed(title="Member left or was kicked", description="{0.mention}\nName: {0.name}#{0.discriminator}\nID: {0.id}".format(member), color=0xFF9710)
         embed.set_thumbnail(url=member.avatar_url)
         await self.bot.send_message(discord.Object(id=log_channel), embed=embed)
